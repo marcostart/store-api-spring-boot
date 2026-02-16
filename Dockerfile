@@ -1,4 +1,3 @@
-# Build stage
 # Image Java légère
 FROM eclipse-temurin:21-jdk-jammy
 
@@ -10,4 +9,3 @@ COPY target/store-project-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9000
 
 ENTRYPOINT ["java","-XX:+UseContainerSupport","-XX:MaxRAMPercentage=75.0","-jar","app.jar"]
-
