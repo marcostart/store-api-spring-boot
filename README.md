@@ -112,7 +112,7 @@ Request → JWT Filter → Authentication → Authorization → Controller
 
 ## Prérequis
 
-- **Java 21** ou supérieur (JDK)
+- **Java 17** ou supérieur (JDK)
 - **Maven 3.8+** (ou utiliser le wrapper Maven inclus `./mvnw`)
 - **PostgreSQL 16** (ou Docker pour l'exécuter)
 - **Docker & Docker Compose** (optionnel, pour le déploiement containerisé)
@@ -169,13 +169,25 @@ SERVER_PORT=9000
 | `DB_HOST` | Hôte PostgreSQL | `localhost` |
 | `DB_PORT` | Port PostgreSQL | `5432` |
 | `DB_NAME` | Nom de la base | `store_db` |
-| `DB_USER` | Utilisateur DB | `root` |
-| `DB_PASSWORD` | Mot de passe DB | `mot2P@ss` |
+| `DB_USER` | Utilisateur DB | `user` |
+| `DB_PASSWORD` | Mot de passe DB | `password` |
 | `JWT_SECRET` | Clé secrète JWT | *(voir properties)* |
 | `JWT_EXPIRATION_MS` | Durée du token (ms) | `86400000` (24h) |
 | `SERVER_PORT` | Port de l'application | `9000` |
 
 ## Lancement
+
+### Initialisation automatique des données
+
+Au premier démarrage, l'application exécute automatiquement des **seeds** pour initialiser les données de base :
+
+- **Rôles** : 3 rôles pré-configurés (USER, ADMIN, SUPER_ADMIN)
+- **Unités de mesure** : 
+  - Poids : gramme (g), kilogramme (kg), milligramme (mg), tonne (t)
+  - Volume : millilitre (mL), centilitre (cL), décilitre (dL), litre (L)
+- **Conversions d'unités** : Toutes les conversions entre unités de la même catégorie
+
+Ces données sont créées uniquement si elles n'existent pas déjà en base de données.
 
 ### Avec Maven (développement)
 
@@ -234,7 +246,7 @@ Une fois l'application lancée, accédez à :
 | Méthode | Endpoint | Description | Auth |
 |---------|----------|-------------|------|
 | GET | `/api/orders` | Toutes les commandes | Oui Admin |
-| GET | `/api/orders/my` | Mes commandes | Oui |
+| GET | `/api/orders/my-orders` | Mes commandes | Oui |
 | GET | `/api/orders/{id}` | Détails commande | Oui |
 | POST | `/api/orders` | Créer commande | Oui |
 | PUT | `/api/orders/{id}` | Modifier commande | Oui |
@@ -376,9 +388,6 @@ docker compose restart app
 docker compose exec app sh
 
 docker stats
-```
-
-Voir [DOCKER-DEPLOY.md](DOCKER-DEPLOY.md) pour le guide complet.
 
 ## Structure du projet
 
@@ -411,13 +420,12 @@ store-project/
 │           │   ├── OrderServiceImplTest.java
 │           │   └── ProductServiceImplTest.java
 │           └── StoreProjectApplicationTests.java
-├── .mvn/                    # Maven wrapper
-├── Dockerfile              # Image Docker multi-stage
-├── docker-compose.yml      # Orchestration Docker
-├── .dockerignore          # Exclusions Docker
-├── pom.xml                # Configuration Maven
-├── DOCKER-DEPLOY.md       # Guide Docker complet
-└── README.md              # Ce fichier
+├── .mvn/                   
+├── Dockerfile              
+├── docker-compose.yml      
+├── .dockerignore         
+├── pom.xml                
+└── README.md              
 ```
 
 ## Fonctionnalités détaillées

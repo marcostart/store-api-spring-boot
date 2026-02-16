@@ -87,14 +87,13 @@ public class UnitSeeder implements CommandLineRunner {
         Unit toUnit = unitCache.get(toCode);
 
         if (fromUnit == null || toUnit == null) {
-            System.out.println("Skipping conversion " + fromCode + " -> " + toCode + " (unit not found)");
+            System.out.println("Skipping conversion " + fromCode + " to " + toCode + " (unit not found)");
             return;
         }
 
         if (unitConversionRepository.findByFromUnitAndToUnit(fromUnit, toUnit).isEmpty()) {
             UnitConversion conversion = new UnitConversion(fromUnit, toUnit, new BigDecimal(factor));
             unitConversionRepository.save(conversion);
-            System.out.println("Created conversion: " + fromCode + " -> " + toCode + " (×" + factor + ")");
         }
     }
 }
